@@ -1,1 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>DocFlow Lite | Invoice & Receipt Processing for Windows</title>
+
+  <meta name="description"
+        content="DocFlow Lite turns invoice and receipt PDFs and images into review-ready Excel and CSV data on Windows.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0b172a;
+      --navy2: #101f36;
+      --blue: #2478ff;
+      --blue2: #1764db;
+      --green: #22c58b;
+      --white: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --light: #f5f8fc;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1120px, 90%);
+      margin: auto;
+    }
+
+    /* NAVIGATION */
+
+    nav {
+      background: var(--navy);
+      color: white;
+      padding: 20px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand span {
+      color: var(--green);
+    }
+
+    .version {
+      color: #b8c5d8;
+      font-size: 14px;
+    }
+
+    /* HERO */
+
+    .hero {
+      background:
+        radial-gradient(circle at 80% 10%, rgba(36,120,255,.20), transparent 35%),
+        linear-gradient(135deg, #0b172a, #102442);
+      color: white;
+      padding: 100px 0 110px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 13px;
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.07);
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 24px;
+      color: #d8e4f5;
+    }
+
+    .hero h1 {
+      max-width: 800px;
+      font-size: clamp(42px, 6vw, 70px);
+      line-height: 1.05;
+      letter-spacing: -2.5px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span {
+      color: #63a0ff;
+    }
+
+    .hero p {
+      max-width: 680px;
+      color: #c6d2e3;
+      font-size: 20px;
+      margin-bottom: 34px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 23px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--blue2);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      color: white;
+      border: 1px solid rgba(255,255,255,.25);
+      background: rgba(255,255,255,.05);
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      color: #91a5bf;
+      font-size: 13px;
+    }
+
+    /* GENERAL */
+
+    section {
+      padding: 85px 0;
+    }
+
+    .section-title {
+      max-width: 700px;
+      margin-bottom: 45px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      line-height: 1.15;
+      margin-bottom: 13px;
+      letter-spacing: -1px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    /* FEATURES */
+
+    .features {
+      background: var(--light);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .icon {
+      width: 43px;
+      height: 43px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: #eaf2ff;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .card h3 {
+      margin-bottom: 9px;
+      font-size: 18px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* WORKFLOW */
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .step-number {
+      color: var(--blue);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .step h3 {
+      margin-bottom: 7px;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* PRIVACY */
+
+    .privacy {
+      background: var(--navy);
+      color: white;
+    }
+
+    .privacy-box {
+      max-width: 850px;
+    }
+
+    .privacy h2 {
+      font-size: 38px;
+      margin-bottom: 18px;
+    }
+
+    .privacy p {
+      color: #bdcadd;
+      font-size: 18px;
+      margin-bottom: 25px;
+    }
+
+    .privacy-points {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .privacy-point {
+      padding: 18px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    /* BETA */
+
+    .beta {
+      text-align: center;
+    }
+
+    .beta-box {
+      max-width: 800px;
+      margin: auto;
+      background: var(--light);
+      padding: 50px;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+    }
+
+    .beta h2 {
+      font-size: 36px;
+      margin-bottom: 15px;
+    }
+
+    .beta p {
+      color: var(--muted);
+      margin: 0 auto 27px;
+      max-width: 620px;
+    }
+
+    .requirements {
+      margin: 28px auto;
+      max-width: 560px;
+      text-align: left;
+    }
+
+    .requirements div {
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* NOTICE */
+
+    .notice {
+      margin-top: 25px;
+      font-size: 13px !important;
+      color: #7c8798 !important;
+    }
+
+    /* FOOTER */
+
+    footer {
+      background: #07111f;
+      color: #8fa1ba;
+      padding: 35px 0;
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    footer strong {
+      color: white;
+    }
+
+    @media (max-width: 800px) {
+      .grid,
+      .steps,
+      .privacy-points {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 75px 0;
+      }
+
+      section {
+        padding: 65px 0;
+      }
+
+      .beta-box {
+        padding: 32px 22px;
+      }
+
+      .nav-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>
+  <div class="container nav-inner">
+    <div class="brand">DocFlow <span>Lite</span></div>
+    <div class="version">Windows • Version 1.0.0</div>
+  </div>
+</nav>
+
+
+<header class="hero">
+  <div class="container">
+
+    <div class="badge">FREE PUBLIC BETA • WINDOWS 10 / 11</div>
+
+    <h1>
+      From invoices to
+      <span>review-ready data.</span>
+    </h1>
+
+    <p>
+      DocFlow Lite helps bookkeepers and small businesses process invoice
+      and receipt PDFs or images, review extracted fields, and export
+      structured data to Excel or CSV.
+    </p>
+
+    <div class="buttons">
+
+      <a class="btn btn-primary"
+         href="https://github.com/asadraj504-afk/docflow-lite/releases">
+        Download Free Beta
+      </a>
+
+      <a class="btn btn-secondary"
+         href="#how-it-works">
+        See How It Works
+      </a>
+
+    </div>
+
+    <div class="hero-note">
+      Local-first document processing • No subscription required for the beta
+    </div>
+
+  </div>
+</header>
+
+
+<section class="features">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Built for repetitive invoice work</h2>
+      <p>
+        Instead of uploading documents one by one, prompting an AI tool,
+        and copying results manually, DocFlow Lite provides a repeatable
+        desktop workflow.
+      </p>
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+        <div class="icon">▣</div>
+        <h3>PDF & Image Intake</h3>
+        <p>
+          Process invoice and receipt documents in PDF, JPG and PNG formats.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">⌕</div>
+        <h3>Field Extraction</h3>
+        <p>
+          Extract vendor, invoice number, date, subtotal, tax, total and currency.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">✓</div>
+        <h3>Review Workflow</h3>
+        <p>
+          Results that may need attention can be surfaced for human review.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">⇩</div>
+        <h3>Excel & CSV Export</h3>
+        <p>
+          Turn reviewed document data into structured files for downstream work.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">≠</div>
+        <h3>Validation Checks</h3>
+        <p>
+          Built-in checks help identify arithmetic issues and possible duplicates.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">↻</div>
+        <h3>Session Recovery</h3>
+        <p>
+          Recovery features help protect ongoing document-processing sessions.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section id="how-it-works">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>A simpler document workflow</h2>
+      <p>
+        Keep repetitive processing in one Windows application.
+      </p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-number">STEP 01</div>
+        <h3>Add documents</h3>
+        <p>Select the invoices and receipts you want to process.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">STEP 02</div>
+        <h3>Process</h3>
+        <p>DocFlow extracts the supported accounting fields.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">STEP 03</div>
+        <h3>Review</h3>
+        <p>Check extracted results and focus on documents needing attention.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">STEP 04</div>
+        <h3>Export</h3>
+        <p>Export the reviewed results to Excel or CSV.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="privacy">
+  <div class="container privacy-box">
+
+    <h2>Local-first by design</h2>
+
+    <p>
+      During normal document processing, DocFlow Lite is designed to process
+      source documents on your Windows PC rather than requiring you to upload
+      each invoice to a hosted document-processing service.
+    </p>
+
+    <div class="privacy-points">
+
+      <div class="privacy-point">
+        <strong>Local processing</strong><br>
+        Core document processing runs on your computer.
+      </div>
+
+      <div class="privacy-point">
+        <strong>Human review</strong><br>
+        Extracted values should be reviewed before being relied upon.
+      </div>
+
+      <div class="privacy-point">
+        <strong>Privacy-aware beta</strong><br>
+        Testers do not need to send confidential source invoices to the developer.
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<section class="beta">
+  <div class="container">
+
+    <div class="beta-box">
+
+      <h2>Help test DocFlow Lite V1</h2>
+
+      <p>
+        We are looking for bookkeepers, accountants and small-business
+        professionals who regularly process invoices or receipts and can
+        provide anonymized workflow feedback.
+      </p>
+
+      <div class="requirements">
+        <div>✓ Windows 10 or Windows 11</div>
+        <div>✓ Test approximately 10–20 authorized invoices or receipts</div>
+        <div>✓ Compare extracted fields with the source documents</div>
+        <div>✓ Report anonymized results and workflow feedback</div>
+      </div>
+
+      <a class="btn btn-primary"
+         href="https://github.com/asadraj504-afk/docflow-lite/releases">
+        Get DocFlow Lite V1.0.0 Beta
+      </a>
+
+      <p class="notice">
+        Beta software. Extraction results may contain errors and should be
+        reviewed before use in bookkeeping, accounting, tax, payment or other
+        business decisions.
+      </p>
+
+    </div>
+
+  </div>
+</section>
+
+
+<footer>
+  <div class="container footer-inner">
+
+    <div>
+      <strong>DocFlow Lite</strong><br>
+      Invoice and receipt workflow for Windows
+    </div>
+
+    <div>
+      Version 1.0.0 • Public Beta
+    </div>
+
+  </div>
+</footer>
+
+</body>
+</html>
